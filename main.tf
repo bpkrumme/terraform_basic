@@ -2,55 +2,55 @@ provider "aws" {
   region = var.ec2_region
 }
 
-resource "aws_vpc" "rhbvpc" {
+resource "aws_vpc" "bdtvpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = false
   tags = {
-    Name = "Red-Hat-Brad-VPC"
+    Name = "Brad-Does-Tech-VPC"
   }
 }
 
 resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.rhbvpc.id
+  vpc_id     = aws_vpc.bdtvpc.id
   cidr_block = "10.0.1.0/24"
   tags = {
-    Name = "Red-Hat-Brad-Subnet-Public"
+    Name = "Brad-Does-Tech-Subnet-Public"
   }
 }
 
-resource "aws_route_table" "rhbrt" {
-  vpc_id = aws_vpc.rhbvpc.id
+resource "aws_route_table" "bdtrt" {
+  vpc_id = aws_vpc.bdtvpc.id
   tags = {
-    Name = "Red-Hat-Brad-Route-Table"
+    Name = "Brad-Does-Tech-Route-Table"
   }
 }
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.rhbrt.id
+  route_table_id = aws_route_table.bdtrt.id
 }
 
-resource "aws_internet_gateway" "rhbigw" {
-  vpc_id = aws_vpc.rhbvpc.id
+resource "aws_internet_gateway" "bdtigw" {
+  vpc_id = aws_vpc.bdtvpc.id
   tags = {
-    Name = "Red-Hat-Brad-Internet-Gateway"
+    Name = "Brad-Does-Tech-Internet-Gateway"
   }
 }
 
 resource "aws_route" "internet-route" {
   destination_cidr_block = "0.0.0.0/0"
-  route_table_id         = aws_route_table.rhbrt.id
-  gateway_id             = aws_internet_gateway.rhbigw.id
+  route_table_id         = aws_route_table.bdtrt.id
+  gateway_id             = aws_internet_gateway.bdtigw.id
 }
 
-resource "aws_security_group" "rhbsg" {
-  name        = "Red-Hat-Brad-SG"
+resource "aws_security_group" "bdtsg" {
+  name        = "Brad-Does-Tech-SG"
   description = "Allow inbound traffic"
   tags = {
-    Name = "Red-Hat-Brad-Inbound-SG"
+    Name = "Brad-Does-Tech-Inbound-SG"
   }
-  vpc_id = aws_vpc.rhbvpc.id
+  vpc_id = aws_vpc.bdtvpc.id
   ingress {
     description = "SSH"
     from_port   = "22"
@@ -93,7 +93,7 @@ resource "aws_instance" "tfservers" {
   instance_type               = var.instance_type
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public.id
-  vpc_security_group_ids      = [aws_security_group.rhbsg.id]
+  vpc_security_group_ids      = [aws_security_group.bdtsg.id]
   key_name                    = var.instance_key
   tags = {
     Name        = "${var.instance_name}${count.index}.redhatbrad.com"
@@ -104,7 +104,7 @@ resource "aws_instance" "tfservers" {
 
 resource "aws_route53_record" "server_dns" {
   count   = var.number_of_instances
-  zone_id = "Z0609117WXOCN225C2H5"
+  zone_id = "${var.hosted_zone_id}"
   name    = "${var.instance_name}${count.index}.${var.instance_domain_name}"
   type    = "A"
   ttl     = 300
