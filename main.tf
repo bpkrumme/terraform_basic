@@ -96,7 +96,7 @@ resource "aws_instance" "tfservers" {
   vpc_security_group_ids      = [aws_security_group.bdtsg.id]
   key_name                    = var.instance_key
   tags = {
-    Name        = "${var.instance_name}${count.index}.redhatbrad.com"
+    Name        = "${var.instance_name}${count.index}.${var.instance_domain_name}"
     Environment = var.instance_environment
     Region      = var.ec2_region
   }
