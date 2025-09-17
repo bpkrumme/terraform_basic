@@ -24,7 +24,7 @@ variable "instance_key" {
 variable "number_of_instances" {
   description = "The number of EC2 instances."
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "instance_domain_name" {
