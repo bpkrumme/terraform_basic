@@ -30,7 +30,7 @@ variable "number_of_instances" {
 variable "instance_domain_name" {
   description = "The domain name for EC2 instances."
   type        = string
-  default     = "redhatbrad.com"
+  default     = "braddoestech.com"
 }
 
 variable "instance_environment" {
