@@ -2,10 +2,10 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.92"
+      version = "~> 6.14"
     }
   }
-  required_version = ">= 1.2"
+  required_version = ">= 1.13"
   backend "s3" {
     bucket = "rhbtfstate"
     key    = "terraform/basic/env/state"
