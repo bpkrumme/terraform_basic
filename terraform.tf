@@ -5,7 +5,7 @@ terraform {
       version = "~> 6.14"
     }
   }
-  required_version = ">= 1.2"
+  required_version = ">= 1.12"
   backend "s3" {
     bucket = "rhbtfstate"
     key    = "terraform/basic/env/state"
